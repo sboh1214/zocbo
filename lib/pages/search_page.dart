@@ -8,8 +8,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final column = 4;
+
   String text = '';
-  bool isOutside = false;
+  bool isOutside = true;
 
   Map<String, dynamic> filter = defaultFilter;
 
@@ -83,26 +85,30 @@ class _SearchPageState extends State<SearchPage> {
     Widget _buildDepartments() {
       return Column(
         children: List.generate(
-          (filter['departments']['options'].length ~/ 4) + 1,
+          (filter['departments']['options'].length ~/ column) + 1,
           (i) {
             return Row(
               children: List.generate(
-                4,
+                column,
                 (j) {
-                  if (4 * i + j < departments.length) {
+                  if (column * i + j < departments.length) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: EdgeInsets.only(
+                        left: (j == 0) ? 0 : 4,
+                        right: (j == column - 1) ? 0 : 4,
+                      ),
                       child: FilterChip(
                         label: Text(
                           filter['departments']['options']
-                              [departments[4 * i + j]]['label'],
+                              [departments[column * i + j]]['label'],
                         ),
                         selected: filter['departments']['options']
-                            [departments[4 * i + j]]['selected'],
+                            [departments[column * i + j]]['selected'],
                         onSelected: (value) {
                           setState(() {
                             filter['departments']['options']
-                                [departments[4 * i + j]]['selected'] = value;
+                                    [departments[column * i + j]]['selected'] =
+                                value;
                           });
                         },
                       ),
@@ -121,24 +127,28 @@ class _SearchPageState extends State<SearchPage> {
     Widget _buildTypes() {
       return Column(
         children: List.generate(
-          (filter['types']['options'].length ~/ 4) + 1,
+          (filter['types']['options'].length ~/ column) + 1,
           (i) {
             return Row(
               children: List.generate(
-                4,
+                column,
                 (j) {
-                  if (4 * i + j < types.length) {
+                  if (column * i + j < types.length) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: EdgeInsets.only(
+                        left: (j == 0) ? 0 : 4,
+                        right: (j == column - 1) ? 0 : 4,
+                      ),
                       child: FilterChip(
                         label: Text(
-                          filter['types']['options'][types[4 * i + j]]['label'],
+                          filter['types']['options'][types[column * i + j]]
+                              ['label'],
                         ),
-                        selected: filter['types']['options'][types[4 * i + j]]
-                            ['selected'],
+                        selected: filter['types']['options']
+                            [types[column * i + j]]['selected'],
                         onSelected: (value) {
                           setState(() {
-                            filter['types']['options'][types[4 * i + j]]
+                            filter['types']['options'][types[column * i + j]]
                                 ['selected'] = value;
                           });
                         },
@@ -158,25 +168,28 @@ class _SearchPageState extends State<SearchPage> {
     Widget _buildLevels() {
       return Column(
         children: List.generate(
-          (filter['levels']['options'].length ~/ 4) + 1,
+          (filter['levels']['options'].length ~/ column) + 1,
           (i) {
             return Row(
               children: List.generate(
-                4,
+                column,
                 (j) {
-                  if (4 * i + j < levels.length) {
+                  if (column * i + j < levels.length) {
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: EdgeInsets.only(
+                        left: (j == 0) ? 0 : 4,
+                        right: (j == column - 1) ? 0 : 4,
+                      ),
                       child: FilterChip(
                         label: Text(
-                          filter['levels']['options'][levels[4 * i + j]]
+                          filter['levels']['options'][levels[column * i + j]]
                               ['label'],
                         ),
-                        selected: filter['levels']['options'][levels[4 * i + j]]
-                            ['selected'],
+                        selected: filter['levels']['options']
+                            [levels[column * i + j]]['selected'],
                         onSelected: (value) {
                           setState(() {
-                            filter['levels']['options'][levels[4 * i + j]]
+                            filter['levels']['options'][levels[column * i + j]]
                                 ['selected'] = value;
                           });
                         },
@@ -194,7 +207,29 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     Widget _buildOutside() {
-      return SizedBox();
+      return Column(
+        children: [
+          const SizedBox(height: 256),
+          Text(
+            'Zocbo',
+            style: textTheme.titleMedium?.copyWith(
+              color: Color(0xFFCCCCCC),
+            ),
+          ),
+          Text(
+            'zocbo@sparcs.org',
+            style: textTheme.bodyMedium?.copyWith(
+              color: Color(0xFFCCCCCC),
+            ),
+          ),
+          Text(
+            '© 2023, SPARCS Zocbo Team',
+            style: textTheme.bodyMedium?.copyWith(
+              color: Color(0xFFCCCCCC),
+            ),
+          ),
+        ],
+      );
     }
 
     Widget _buildInside() {
@@ -278,7 +313,7 @@ final Map<String, dynamic> defaultFilter = {
       "BS": {"label": "생명", "selected": false},
       "CBE": {"label": "생화", "selected": false},
       "MAS": {"label": "수리", "selected": false},
-      "MS": {"label": "신소", "selected": false},
+      "MS": {"label": "소재", "selected": false},
       "NQE": {"label": "원양", "selected": false},
       "TS": {"label": "융인", "selected": false},
       "CS": {"label": "전산", "selected": false},

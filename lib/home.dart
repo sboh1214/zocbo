@@ -51,7 +51,6 @@ class _HomeState extends State<Home> {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         appBarTheme: const AppBarTheme(
-          color: Colors.transparent,
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarBrightness: Brightness.dark,
           ),

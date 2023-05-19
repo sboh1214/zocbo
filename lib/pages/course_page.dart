@@ -91,14 +91,15 @@ class _CoursePageState extends State<CoursePage> {
   }
 
   Widget _buildBody() {
-    final titleStyle = Theme.of(context)
-        .textTheme
-        .titleSmall!
-        .copyWith(fontWeight: FontWeight.bold);
-    final descStyle = Theme.of(context).textTheme.titleSmall;
+    final textTheme = Theme.of(context).textTheme;
+    final titleStyle = textTheme.titleSmall?.copyWith(
+      fontWeight: FontWeight.bold,
+    );
+    final descStyle = textTheme.titleSmall;
 
     return Container(
         margin: const EdgeInsets.all(16),
+        color: Theme.of(context).colorScheme.surface,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -158,6 +159,7 @@ class _CoursePageState extends State<CoursePage> {
                   ],
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "시험 설명",
@@ -170,10 +172,12 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
                 SizedBox(
                   height: 200,
                   child: _buildGraph(),
                 ),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Text(
@@ -224,21 +228,24 @@ class _CoursePageState extends State<CoursePage> {
                       children: [
                         Text(
                           "내 점수",
-                          style: titleStyle,
+                          style: textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           "80점 (상위 15%)",
-                          style: descStyle,
+                          style: textTheme.titleMedium,
                         ),
                       ],
                     ),
-                    IconButton(
+                    IconButton.filled(
                       onPressed: () {},
                       icon: const Icon(Icons.edit),
                     )
                   ],
                 ),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(

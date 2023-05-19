@@ -39,8 +39,11 @@ class _HomePageState extends State<HomePage> {
         length: 2,
         child: Scaffold(
           key: scaffoldKey,
-          backgroundColor: colorScheme.surfaceVariant,
+          backgroundColor: screenIndex < 2
+              ? colorScheme.surfaceVariant
+              : colorScheme.surface,
           appBar: AppBar(
+            backgroundColor: colorScheme.surfaceVariant,
             toolbarHeight: 64,
             centerTitle: true,
             title: screenIndex < 2
@@ -57,27 +60,28 @@ class _HomePageState extends State<HomePage> {
                 height: 5,
               ),
             ),
-            actions: [
-              if (screenIndex > 1)
-                FilledButton(
-                  style: const ButtonStyle(
-                    padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                  ),
-                  onPressed: () {},
-                  child: const Row(
-                    children: [
-                      Icon(Icons.calendar_today, size: 16),
-                      SizedBox(width: 4),
-                      Icon(Icons.keyboard_arrow_down, size: 16)
-                    ],
-                  ),
-                ),
-              const SizedBox(width: 4),
-            ],
+            actions: screenIndex < 2
+                ? null
+                : [
+                    FilledButton(
+                      style: const ButtonStyle(
+                        padding: MaterialStatePropertyAll(EdgeInsets.zero),
+                      ),
+                      onPressed: () {},
+                      child: const Row(
+                        children: [
+                          Icon(Icons.calendar_today, size: 16),
+                          SizedBox(width: 4),
+                          Icon(Icons.keyboard_arrow_down, size: 16)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
             bottom: screenIndex < 2
                 ? null
-                : TabBar(
-                    tabs: const [
+                : const TabBar(
+                    tabs: [
                       Tab(text: '중간'),
                       Tab(text: '기말'),
                     ],
