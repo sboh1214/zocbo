@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/models/lecture.dart';
+import 'package:zocbo/pages/course_page.dart';
+import 'package:zocbo/pages/search_page.dart';
+import 'package:zocbo/pages/user_page.dart';
 import 'package:zocbo/services/info_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,18 +23,42 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       screenIndex = selectedScreen;
     });
+    scaffoldKey.currentState!.closeDrawer();
   }
 
   @override
   Widget build(BuildContext context) {
     final user = context.read<InfoService>().user;
+    final currentLectures = user.myTimetableLectures
+        .where((lecture) => lecture.year == 2023 && lecture.semester == 1)
+        .toList();
+
+    final title = screenIndex == 0
+        ? user.lastName + user.firstName
+        : screenIndex == 1
+            ? "족보 열람"
+            : currentLectures[screenIndex - 2].title;
 
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text("프로그래밍 기초"),
+        title: Text(title),
+        actions: [
+          ElevatedButton(
+              onPressed: () {},
+              child: const Row(
+                children: [
+                  Icon(Icons.calendar_today),
+                  Icon(Icons.arrow_drop_down)
+                ],
+              ))
+        ],
       ),
-      body: SafeArea(bottom: false, top: false, child: Text("data")),
+      body: screenIndex == 0
+          ? const UserPage()
+          : screenIndex == 1
+              ? const SearchPage()
+              : const CoursePage(),
       drawer: NavigationDrawer(
         onDestinationSelected: handleScreenChanged,
         selectedIndex: screenIndex,
@@ -56,9 +83,7 @@ class _HomePageState extends State<HomePage> {
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          ...user.myTimetableLectures
-              .where((lecture) => lecture.year == 2023 && lecture.semester == 1)
-              .map(
+          ...currentLectures.map(
             (Lecture lecture) {
               return NavigationDrawerDestination(
                 label: Text(lecture.title),
