@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int screenIndex = 1;
+  int screenIndex = 2;
   late bool showNavigationDrawer;
 
   void handleScreenChanged(int selectedScreen) {

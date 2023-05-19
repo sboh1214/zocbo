@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -8,84 +10,97 @@ class CoursePage extends StatefulWidget {
   State<CoursePage> createState() => _CoursePageState();
 }
 
-Widget leftTitles(double value, TitleMeta meta) {
-  const style = TextStyle(
-    color: Color(0xff7589a2),
-    fontWeight: FontWeight.bold,
-    fontSize: 14,
-  );
-  String text;
-  if (value == 0) {
-    text = '1K';
-  } else if (value == 10) {
-    text = '5K';
-  } else if (value == 19) {
-    text = '10K';
-  } else {
-    return Container();
-  }
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    space: 0,
-    child: Text(text, style: style),
-  );
-}
-
-Widget bottomTitles(double value, TitleMeta meta) {
-  final Widget text = Text(
-    value.toString(),
-    style: const TextStyle(
-      color: Color(0xff7589a2),
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-    ),
-  );
-
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    space: 16, //margin top
-    child: text,
-  );
-}
-
 class _CoursePageState extends State<CoursePage> {
+  Widget leftTitles(double value, TitleMeta meta) {
+    String text;
+
+    if (value == 0) {
+      text = '1';
+    } else if (value == 5) {
+      text = '5';
+    } else if (value == 10) {
+      text = '10';
+    } else if (value == 15) {
+      text = '15';
+    } else if (value == 20) {
+      text = '20';
+    } else {
+      return Container();
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
+      ),
+    );
+  }
+
+  Widget bottomTitles(double value, TitleMeta meta) {
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(
+        value.toInt().toString(),
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
+      ),
+    );
+  }
+
   Widget _buildGraph() {
     return BarChart(
       BarChartData(
-        maxY: 100,
-        barGroups: [
-          BarChartGroupData(
-              x: 0,
-              barRods: [BarChartRodData(toY: 30), BarChartRodData(toY: 20)]),
-        ],
-        barTouchData: BarTouchData(
-          touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.grey,
-            getTooltipItem: (a, b, c, d) => null,
+        maxY: 20,
+        barGroups: List.generate(
+          10,
+          (index) => BarChartGroupData(
+            x: 10 * index + 5,
+            barRods: [
+              BarChartRodData(
+                toY: Random().nextDouble() * 20,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              BarChartRodData(
+                toY: Random().nextDouble() * 20,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ],
           ),
         ),
         titlesData: FlTitlesData(
-          show: true,
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: leftTitles,
+            ),
+          ),
+          topTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
+          ),
+          rightTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
+          ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: bottomTitles,
-              reservedSize: 42,
-            ),
-          ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 28,
-              interval: 1,
-              getTitlesWidget: leftTitles,
             ),
           ),
         ),
         borderData: FlBorderData(
           show: false,
         ),
-        gridData: FlGridData(show: true),
+        gridData: FlGridData(
+          show: true,
+        ),
       ),
     );
   }
@@ -174,7 +189,7 @@ class _CoursePageState extends State<CoursePage> {
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
-                  height: 200,
+                  height: (MediaQuery.of(context).size.width - 2 * 16) / 2,
                   child: _buildGraph(),
                 ),
                 const SizedBox(height: 16),
