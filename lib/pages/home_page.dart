@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int screenIndex = 0;
+  int screenIndex = 2;
   late bool showNavigationDrawer;
 
   void handleScreenChanged(int selectedScreen) {
@@ -28,30 +28,48 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final user = context.read<InfoService>().user;
     final currentLectures = user.myTimetableLectures
         .where((lecture) => lecture.year == 2023 && lecture.semester == 1)
         .toList();
 
-    final title = screenIndex == 0
-        ? user.lastName + user.firstName
-        : screenIndex == 1
-            ? "족보 열람"
-            : currentLectures[screenIndex - 2].title;
-
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: colorScheme.surfaceVariant,
       appBar: AppBar(
-        title: Text(title),
+        centerTitle: true,
+        title: screenIndex < 2
+            ? Image.asset('assets/logo.png', height: 27)
+            : Text(
+                currentLectures[screenIndex - 2].title,
+                style: textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+        flexibleSpace: SafeArea(
+          child: Container(
+            color: colorScheme.primary,
+            height: 5,
+          ),
+        ),
         actions: [
-          ElevatedButton(
+          if (screenIndex > 1)
+            FilledButton(
+              style: const ButtonStyle(
+                padding: MaterialStatePropertyAll(EdgeInsets.zero),
+              ),
               onPressed: () {},
               child: const Row(
                 children: [
-                  Icon(Icons.calendar_today),
-                  Icon(Icons.arrow_drop_down)
+                  Icon(Icons.calendar_today, size: 16),
+                  SizedBox(width: 4),
+                  Icon(Icons.keyboard_arrow_down, size: 16)
                 ],
-              ))
+              ),
+            ),
+          const SizedBox(width: 4),
         ],
       ),
       body: screenIndex == 0
@@ -64,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         selectedIndex: screenIndex,
         children: <Widget>[
           NavigationDrawerDestination(
-            label: Text("${user.lastName}${user.firstName}"),
+            label: Text("${user.lastName} ${user.firstName}"),
             icon: const Icon(Icons.abc),
           ),
           const NavigationDrawerDestination(

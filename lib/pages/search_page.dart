@@ -10,10 +10,8 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Expanded(
-        child: Text("Search Page"),
-      ),
+    return const Center(
+      child: Text("Search Page"),
     );
   }
 }
