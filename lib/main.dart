@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/home.dart';
-import 'package:zocbo/pages/auth_page.dart';
-import 'package:zocbo/pages/search_page.dart';
 import 'package:zocbo/services/info_service.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';

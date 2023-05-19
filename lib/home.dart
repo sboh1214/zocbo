@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/pages/auth_page.dart';
-import 'package:zocbo/pages/search_page.dart';
+import 'package:zocbo/pages/home_page.dart';
 import 'package:zocbo/services/auth_service.dart';
 
 import 'services/info_service.dart';
@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const SearchPage(),
+            builder: (context, state) => const HomePage(),
           ),
           GoRoute(
             path: '/auth',
