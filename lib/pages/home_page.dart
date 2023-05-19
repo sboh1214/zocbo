@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zocbo/services/lecture_service.dart';
+import '../models/exam.dart';
 import '../models/lecture.dart';
 import '../pages/course_page.dart';
 import '../pages/search_page.dart';
@@ -23,7 +25,27 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       screenIndex = selectedScreen;
     });
+    if (selectedScreen > 1) {
+      context.read<LectureService>().setLecture(selectedScreen - 2);
+    }
     scaffoldKey.currentState!.closeDrawer();
+  }
+
+  List<Widget> _buildTabs(List<Exam> exams) {
+    List<Widget> tabs = [];
+    if (exams.any((exam) => exam.id == 'mid')) {
+      tabs.add(const Tab(text: '중간고사'));
+    }
+    if (exams.any((exam) => exam.id == 'final')) {
+      tabs.add(const Tab(text: '기말고사'));
+    }
+    if (exams.any((exam) => exam.id?.contains('quiz') ?? false)) {
+      tabs.add(const Tab(text: '퀴즈'));
+    }
+    if (exams.any((exam) => exam.id?.contains('assignment') ?? false)) {
+      tabs.add(const Tab(text: '과제'));
+    }
+    return tabs;
   }
 
   @override
@@ -31,12 +53,11 @@ class _HomePageState extends State<HomePage> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final user = context.read<InfoService>().user;
-    final currentLectures = user.myTimetableLectures
-        .where((lecture) => lecture.year == 2023 && lecture.semester == 1)
-        .toList();
+    final currentLectures = context.watch<LectureService>().lectures;
+    final exams = context.watch<LectureService>().exams;
 
     return DefaultTabController(
-        length: 2,
+        length: exams.length,
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: screenIndex < 2
@@ -60,31 +81,45 @@ class _HomePageState extends State<HomePage> {
                 height: 5,
               ),
             ),
-            actions: screenIndex < 2
-                ? null
-                : [
-                    FilledButton(
-                      style: const ButtonStyle(
-                        padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                      ),
-                      onPressed: () {},
-                      child: const Row(
-                        children: [
-                          Icon(Icons.calendar_today, size: 16),
-                          SizedBox(width: 4),
-                          Icon(Icons.keyboard_arrow_down, size: 16)
-                        ],
-                      ),
+            actions: [
+              if (screenIndex > 1)
+                PopupMenuButton(
+                  child: FilledButton(
+                    style: const ButtonStyle(
+                      padding: MaterialStatePropertyAll(EdgeInsets.zero),
                     ),
-                    const SizedBox(width: 8),
+                    onPressed: () {},
+                    child: const Row(
+                      children: [
+                        Icon(Icons.calendar_today, size: 16),
+                        SizedBox(width: 4),
+                        Icon(Icons.keyboard_arrow_down, size: 16)
+                      ],
+                    ),
+                  ),
+                  itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+                    const PopupMenuItem<int>(
+                      value: 1,
+                      child: Text('Item 1'),
+                    ),
+                    const PopupMenuItem<int>(
+                      value: 2,
+                      child: Text('Item 2'),
+                    ),
+                    const PopupMenuItem<int>(
+                      value: 3,
+                      child: Text('Item 3'),
+                    ),
                   ],
-            bottom: screenIndex < 2
+                ),
+              const SizedBox(width: 4),
+            ],
+            bottom: screenIndex < 2 || exams.isEmpty
                 ? null
-                : const TabBar(
-                    tabs: [
-                      Tab(text: '중간'),
-                      Tab(text: '기말'),
-                    ],
+                : TabBar(
+                    tabs: _buildTabs(exams),
+                    onTap: (index) =>
+                        {context.read<LectureService>().setExamIndex(index)},
                   ),
           ),
           body: screenIndex == 0

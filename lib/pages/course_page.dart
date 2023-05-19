@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zocbo/services/lecture_service.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
@@ -283,6 +285,11 @@ class _CoursePageState extends State<CoursePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isEmpty = context.watch<LectureService>().exams.isEmpty;
+
+    if (isEmpty) {
+      return const Text("교수님이 아직 족보를 올리지 않았어요!");
+    }
     return TabBarView(
       children: [
         _buildBody(),
