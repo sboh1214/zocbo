@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zocbo/models/lecture.dart';
-import 'package:zocbo/pages/course_page.dart';
-import 'package:zocbo/pages/search_page.dart';
-import 'package:zocbo/pages/user_page.dart';
-import 'package:zocbo/services/info_service.dart';
+import '../models/lecture.dart';
+import '../pages/course_page.dart';
+import '../pages/search_page.dart';
+import '../pages/user_page.dart';
+import '../services/info_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
