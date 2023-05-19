@@ -18,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  int screenIndex = 1;
+  int screenIndex = 2;
   late bool showNavigationDrawer;
 
   void handleScreenChanged(int selectedScreen) {
@@ -60,8 +60,11 @@ class _HomePageState extends State<HomePage> {
         length: exams.length,
         child: Scaffold(
           key: scaffoldKey,
-          backgroundColor: colorScheme.surfaceVariant,
+          backgroundColor: screenIndex < 2
+              ? colorScheme.surfaceVariant
+              : colorScheme.surface,
           appBar: AppBar(
+            backgroundColor: colorScheme.surfaceVariant,
             toolbarHeight: 64,
             centerTitle: true,
             title: screenIndex < 2
