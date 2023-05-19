@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "427837916892",
+    "project_id": "zocbo-e3371",
+    "storage_bucket": "zocbo-e3371.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427837916892:android:40eec1fdf2a96c191b1619",
+        "android_client_info": {
+          "package_name": "org.sparcs.zocbo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427837916892-hder1uf4bsoq1mg9rtfvvebjae5smc97.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaApE9IklK3YtpGL4cV3dcLoelQjGe-vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427837916892-hder1uf4bsoq1mg9rtfvvebjae5smc97.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "427837916892-jpsvqulvnc86ml4qsrcsmmprvshjn1o7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.sparcs.zocbo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
