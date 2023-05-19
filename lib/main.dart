@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/home.dart';
+import 'package:zocbo/models/setting.dart';
 import 'package:zocbo/services/info_service.dart';
 import 'package:zocbo/services/search_service.dart';
 import 'package:zocbo/services/lecture_service.dart';
@@ -51,6 +52,7 @@ class _ZocboAppState extends State<ZocboApp> {
                   : LectureService();
             }),
         ChangeNotifierProvider<SearchService>(create: (_) => SearchService()),
+        ChangeNotifierProvider<Setting>(create: (_) => Setting()),
       ],
       child: Builder(
         builder: (context) {
