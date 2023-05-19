@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zocbo/models/course.dart';
+import 'package:zocbo/services/search_service.dart';
+import 'package:zocbo/utils/filter.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -71,7 +75,33 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.search),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await context.read<SearchService>().courseSearch(
+                              text,
+                              department: departments
+                                  .where(
+                                    (element) => filter['departments']
+                                        ['options'][element]['selected'],
+                                  )
+                                  .toList(),
+                              type: types
+                                  .where(
+                                    (element) => filter['types']['options']
+                                        [element]['selected'],
+                                  )
+                                  .toList(),
+                              level: levels
+                                  .where(
+                                    (element) => filter['levels']['options']
+                                        [element]['selected'],
+                                  )
+                                  .toList(),
+                            );
+
+                        setState(() {
+                          isOutside = true;
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -206,7 +236,7 @@ class _SearchPageState extends State<SearchPage> {
       );
     }
 
-    Widget _buildOutside() {
+    Widget _buildEmptyOutside() {
       return Column(
         children: [
           const SizedBox(height: 256),
@@ -230,6 +260,77 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ],
       );
+    }
+
+    Widget _buildNotEmptyOutside() {
+      List<Course> _courses = context.read<SearchService>().courses!;
+
+      return Expanded(
+        child: ListView(
+          children: List.generate(
+            _courses.length,
+            (index) => GestureDetector(
+              onTap: () {},
+              child: Container(
+                margin: EdgeInsets.only(
+                  top: (index == 0) ? 0 : 8,
+                  bottom: (index == _courses.length - 1) ? 0 : 8,
+                  left: 16,
+                  right: 16,
+                ),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEEEEEE),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          _courses[index].title,
+                          style: textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          _courses[index].oldCode,
+                          style: textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Divider(),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text(
+                          '제공 학기',
+                          style: textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '2021 봄, 2022 봄, 2023 봄',
+                          style: textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget _buildOutside() {
+      return context.read<SearchService>().courses!.isEmpty
+          ? _buildEmptyOutside()
+          : _buildNotEmptyOutside();
     }
 
     Widget _buildInside() {
@@ -293,58 +394,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-
-final departments = defaultFilter['departments']['options'].keys.toList();
-final types = defaultFilter['types']['options'].keys.toList();
-final levels = defaultFilter['levels']['options'].keys.toList();
-
-final Map<String, dynamic> defaultFilter = {
-  "departments": {
-    "label": "학과",
-    "options": {
-      "HSS": {"label": "인문", "selected": false},
-      "CE": {"label": "건환", "selected": false},
-      "MSB": {"label": "기경", "selected": false},
-      "ME": {"label": "기계", "selected": false},
-      "PH": {"label": "물리", "selected": false},
-      "BiS": {"label": "바공", "selected": false},
-      "IE": {"label": "산공", "selected": false},
-      "ID": {"label": "산디", "selected": false},
-      "BS": {"label": "생명", "selected": false},
-      "CBE": {"label": "생화", "selected": false},
-      "MAS": {"label": "수리", "selected": false},
-      "MS": {"label": "소재", "selected": false},
-      "NQE": {"label": "원양", "selected": false},
-      "TS": {"label": "융인", "selected": false},
-      "CS": {"label": "전산", "selected": false},
-      "EE": {"label": "전자", "selected": false},
-      "AE": {"label": "항공", "selected": false},
-      "CH": {"label": "화학", "selected": false},
-      "ETC": {"label": "기타", "selected": false},
-    }
-  },
-  "types": {
-    "label": "구분",
-    "options": {
-      "BR": {"label": "기필", "selected": false},
-      "BE": {"label": "기선", "selected": false},
-      "MR": {"label": "전필", "selected": false},
-      "ME": {"label": "전선", "selected": false},
-      "MGC": {"label": "교필", "selected": false},
-      "HSE": {"label": "인선", "selected": false},
-      "GR": {"label": "공통", "selected": false},
-      "EG": {"label": "석박", "selected": false},
-      "OE": {"label": "자선", "selected": false},
-      "ETC": {"label": "기타", "selected": false},
-    }
-  },
-  "levels": {
-    "label": "학년",
-    "options": {
-      "100": {"label": "100", "selected": false},
-      "200": {"label": "200", "selected": false},
-      "300": {"label": "300", "selected": false},
-      "400": {"label": "400", "selected": false},
-    }
-  },
-};

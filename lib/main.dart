@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/home.dart';
 import 'package:zocbo/services/info_service.dart';
+import 'package:zocbo/services/search_service.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
 
@@ -39,6 +40,7 @@ class _ZocboAppState extends State<ZocboApp> {
             return (infoModel is InfoService) ? infoModel : InfoService();
           },
         ),
+        ChangeNotifierProvider<SearchService>(create: (_) => SearchService()),
       ],
       child: Builder(
         builder: (context) {
