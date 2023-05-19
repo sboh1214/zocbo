@@ -10,10 +10,8 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("User Page"),
-      ),
+    return const Center(
+      child: Text("User Page"),
     );
   }
 }

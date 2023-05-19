@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/pages/auth_page.dart';
@@ -43,10 +44,19 @@ class _HomeState extends State<Home> {
         });
 
     return MaterialApp.router(
-        title: "Zocbo",
-        routerConfig: _goRouter,
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-            useMaterial3: true));
+      title: "Zocbo",
+      debugShowCheckedModeBanner: false,
+      routerConfig: _goRouter,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        appBarTheme: const AppBarTheme(
+          color: Colors.transparent,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+          ),
+        ),
+      ),
+    );
   }
 }
