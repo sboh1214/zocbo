@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:zocbo/models/setting.dart';
 import 'package:zocbo/pages/auth_page.dart';
 import 'package:zocbo/pages/home_page.dart';
 import 'package:zocbo/services/auth_service.dart';
@@ -49,10 +50,15 @@ class _HomeState extends State<Home> {
       routerConfig: _goRouter,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: context.watch<Setting>().brightness,
+        ),
         appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
             statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
           ),
         ),
       ),

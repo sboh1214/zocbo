@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/models/course.dart';
+import 'package:zocbo/models/setting.dart';
 import 'package:zocbo/services/search_service.dart';
 import 'package:zocbo/utils/filter.dart';
 
@@ -124,8 +125,8 @@ class _SearchPageState extends State<SearchPage> {
                   if (column * i + j < departments.length) {
                     return Padding(
                       padding: EdgeInsets.only(
-                        left: (j == 0) ? 0 : 4,
-                        right: (j == column - 1) ? 0 : 4,
+                        left: j == 0 ? 0 : 4,
+                        right: j == column - 1 ? 0 : 4,
                       ),
                       child: FilterChip(
                         label: Text(
@@ -166,8 +167,8 @@ class _SearchPageState extends State<SearchPage> {
                   if (column * i + j < types.length) {
                     return Padding(
                       padding: EdgeInsets.only(
-                        left: (j == 0) ? 0 : 4,
-                        right: (j == column - 1) ? 0 : 4,
+                        left: j == 0 ? 0 : 4,
+                        right: j == column - 1 ? 0 : 4,
                       ),
                       child: FilterChip(
                         label: Text(
@@ -207,8 +208,8 @@ class _SearchPageState extends State<SearchPage> {
                   if (column * i + j < levels.length) {
                     return Padding(
                       padding: EdgeInsets.only(
-                        left: (j == 0) ? 0 : 4,
-                        right: (j == column - 1) ? 0 : 4,
+                        left: j == 0 ? 0 : 4,
+                        right: j == column - 1 ? 0 : 4,
                       ),
                       child: FilterChip(
                         label: Text(
@@ -237,25 +238,30 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     Widget _buildEmptyOutside() {
+      final Color _color =
+          context.watch<Setting>().brightness == Brightness.light
+              ? Color(0xFFAAAAAA)
+              : Color(0xFF555555);
+
       return Column(
         children: [
           const SizedBox(height: 256),
           Text(
             'Zocbo',
             style: textTheme.titleMedium?.copyWith(
-              color: Color(0xFFCCCCCC),
+              color: _color,
             ),
           ),
           Text(
             'zocbo@sparcs.org',
             style: textTheme.bodyMedium?.copyWith(
-              color: Color(0xFFCCCCCC),
+              color: _color,
             ),
           ),
           Text(
             '© 2023, SPARCS Zocbo Team',
             style: textTheme.bodyMedium?.copyWith(
-              color: Color(0xFFCCCCCC),
+              color: _color,
             ),
           ),
         ],
@@ -273,14 +279,16 @@ class _SearchPageState extends State<SearchPage> {
               onTap: () {},
               child: Container(
                 margin: EdgeInsets.only(
-                  top: (index == 0) ? 0 : 8,
-                  bottom: (index == _courses.length - 1) ? 0 : 8,
+                  top: index == 0 ? 0 : 8,
+                  bottom: index == _courses.length - 1 ? 0 : 8,
                   left: 16,
                   right: 16,
                 ),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFEEEEEE),
+                  color: context.watch<Setting>().brightness == Brightness.light
+                      ? Color(0xFFEEEEEE)
+                      : Color(0xFF111111),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
