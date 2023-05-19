@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zocbo/models/setting.dart';
 import 'package:zocbo/services/lecture_service.dart';
 
 import '../models/exam.dart';
@@ -191,12 +192,12 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
                 SizedBox(
                   height: (MediaQuery.of(context).size.width - 2 * 16) / 2,
                   child: _buildGraph(),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
                 Row(
                   children: [
                     Text(
@@ -300,10 +301,38 @@ class _CoursePageState extends State<CoursePage> {
   @override
   Widget build(BuildContext context) {
     final exams = context.watch<LectureService>().exams;
+    final textTheme = Theme.of(context).textTheme;
 
     if (exams.isEmpty) {
-      return const Center(
-        child: Text("교수님이 아직 족보를 올리지 않았어요!"),
+      final Color _color =
+          context.watch<Setting>().brightness == Brightness.light
+              ? Color(0xFFAAAAAA)
+              : Color(0xFF555555);
+
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Zocbo',
+              style: textTheme.titleMedium?.copyWith(
+                color: _color,
+              ),
+            ),
+            Text(
+              'zocbo@sparcs.org',
+              style: textTheme.bodyMedium?.copyWith(
+                color: _color,
+              ),
+            ),
+            Text(
+              '© 2023, SPARCS Zocbo Team',
+              style: textTheme.bodyMedium?.copyWith(
+                color: _color,
+              ),
+            ),
+          ],
+        ),
       );
     }
     return TabBarView(

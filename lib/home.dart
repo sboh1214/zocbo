@@ -54,11 +54,13 @@ class _HomeState extends State<Home> {
           seedColor: Colors.indigo,
           brightness: context.watch<Setting>().brightness,
         ),
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
+            statusBarIconBrightness:
+                context.watch<Setting>().brightness == Brightness.light
+                    ? Brightness.dark
+                    : Brightness.light,
           ),
         ),
       ),

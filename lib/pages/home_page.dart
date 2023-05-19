@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 8),
                 ],
           bottom: (screenIndex < 2 || exams.isEmpty)
               ? null
