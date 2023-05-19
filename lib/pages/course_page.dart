@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zocbo/services/lecture_service.dart';
 
+import '../models/exam.dart';
+
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key});
 
@@ -107,7 +109,7 @@ class _CoursePageState extends State<CoursePage> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(Exam exam) {
     final textTheme = Theme.of(context).textTheme;
     final titleStyle = textTheme.titleSmall?.copyWith(
       fontWeight: FontWeight.bold,
@@ -131,7 +133,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "비대면",
+                      exam.type ?? '모름',
                       style: descStyle,
                     ),
                   ],
@@ -144,7 +146,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "120분",
+                      "${exam.duration}분",
                       style: descStyle,
                     ),
                   ],
@@ -157,7 +159,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "30%",
+                      "${exam.ratio}%",
                       style: descStyle,
                     ),
                   ],
@@ -170,7 +172,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "100점",
+                      "${exam.totalScore}점",
                       style: descStyle,
                     ),
                   ],
@@ -184,7 +186,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "프로그래밍 기초 중간고사입니다.\n프로그래밍 기초 중간고사입니다.",
+                      exam.description ?? "설명 없음",
                       style: descStyle,
                     ),
                   ],
@@ -203,7 +205,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "35점, 3.5점",
+                      "${exam.avg ?? '??'}점 ${exam.std ?? '??'}점",
                       style: descStyle,
                     ),
                   ],
@@ -216,7 +218,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "95점, 5점",
+                      "${exam.max ?? '??'}점, ${exam.min ?? '??'}점",
                       style: descStyle,
                     ),
                   ],
@@ -229,7 +231,7 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      "25점, 50점, 75점",
+                      "${exam.q1 ?? '??'}점, ${exam.q2 ?? '??'}점, ${exam.q3 ?? '??'}점",
                       style: descStyle,
                     ),
                   ],
@@ -283,18 +285,29 @@ class _CoursePageState extends State<CoursePage> {
         ));
   }
 
+  List<Widget> _buildTabs(List<Exam> exams) {
+    List<Widget> tabs = [];
+    if (exams.any((element) => element.id == 'mid')) {
+      tabs.add(_buildBody(exams.firstWhere((element) => element.id == 'mid')));
+    }
+    if (exams.any((element) => element.id == 'final')) {
+      tabs.add(
+          _buildBody(exams.firstWhere((element) => element.id == 'final')));
+    }
+    return tabs;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isEmpty = context.watch<LectureService>().exams.isEmpty;
+    final exams = context.watch<LectureService>().exams;
 
-    if (isEmpty) {
-      return const Text("교수님이 아직 족보를 올리지 않았어요!");
+    if (exams.isEmpty) {
+      return const Center(
+        child: Text("교수님이 아직 족보를 올리지 않았어요!"),
+      );
     }
     return TabBarView(
-      children: [
-        _buildBody(),
-        _buildBody(),
-      ],
+      children: _buildTabs(exams),
     );
   }
 }
